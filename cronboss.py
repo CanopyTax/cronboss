@@ -27,7 +27,8 @@ def select_container():
 
 def runCommand():
     container_id = select_container()
-    print('Running command. Current time: {}'.format(str(datetime.now())))
+    print('Running command on container {}. Current time: {}'
+          .format(container_id[:8], str(datetime.now())))
     cmd_args = sys.argv[1:]  # Trim the first argument (this program)
     exec_id = docker.exec_create(container_id, cmd_args, tty=True).get('Id')
     output = docker.exec_start(exec_id)
@@ -72,6 +73,7 @@ def run_schedule():
 
 
 if __name__ == "__main__":
+    print(sys.argv)
     if not os.getenv('SELECTOR_LABEL'):
         print('ERROR: environment variable "SELECTOR_LABEL" is required.')
         exit(1)
