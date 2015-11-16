@@ -16,8 +16,7 @@ docker = Client(base_url='unix://var/run/docker.sock')
 
 def select_container():
     selector = os.getenv('SELECTOR_LABEL')
-    key, value = selector.split('=')
-    eligible_containers = docker.containers(filters={key: value})
+    eligible_containers = docker.containers(filters={'label': selector, 'status': 'running'})
     if len(eligible_containers) < 1:
         print('ERROR: No containers found with SELECTOR_LABEL "{}"'
               .format(selector))
