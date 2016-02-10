@@ -35,3 +35,16 @@ Example:
 ## Run Now!
 
 You can also just use this container to do a one-time command. You do this by setting `UNIT=now`.
+
+
+## Slack Notifications
+
+The cronboss will send the "logs" of every run to a slack channel if you prefer. In order to send logs to slack,
+all you need to do is add the following environment variables. You get the webhook url from slack admin panel when you add a webhook integration.
+
+```bash
+SLACK_WEBHOOK_URL='https://hooks.slack.com/whatever-your-hook-is'  #required
+SLACK_CHANNEL='#somechannel'  #defaults to #general
+SLACK_USERNAME='myuser'  #defaults to cron boss
+SLACK_ICON_URL='https://some.url.com'  #not required, but used if you dont like the default icon
+```
