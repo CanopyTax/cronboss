@@ -11,6 +11,11 @@ from datetime import datetime
 
 from docker import Client
 
+
+class SelectorException(Exception):
+    pass
+
+
 cmd_args = sys.argv[1:]  # Trim
 docker = Client(base_url='unix://var/run/docker.sock')
 SLACK_WEBHOOK_URL = os.getenv('SLACK_WEBHOOK_URL')
@@ -20,14 +25,19 @@ def select_container():
     selector = os.getenv('SELECTOR_LABEL')
     eligible_containers = docker.containers(filters={'label': selector, 'status': 'running'})
     if len(eligible_containers) < 1:
-        print('ERROR: No containers found with SELECTOR_LABEL "{}"'
+        raise SelectorException('ERROR: No containers found with SELECTOR_LABEL "{}"'
               .format(selector))
     else:
         return eligible_containers[0].get('Id')
 
 
 def run_command():
-    container_id = select_container()
+    try:
+        container_id = select_container()
+    except SelectorException as e:
+        report_to_slack(e)
+        return
+
     print('Running command on container {}. Current time: {}'
           .format(container_id[:8], str(datetime.now())))
     cmd_args = sys.argv[1:]  # Trim the first argument (this program)
