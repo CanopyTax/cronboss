@@ -13,6 +13,7 @@ from docker import Client
 
 
 class SelectorException(Exception):
+    raise
     pass
 
 
@@ -35,7 +36,7 @@ def run_command():
     try:
         container_id = select_container()
     except SelectorException as e:
-        report_to_slack(e)
+        report_to_slack(str(e))
         return
 
     print('Running command on container {}. Current time: {}'
