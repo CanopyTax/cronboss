@@ -1,6 +1,4 @@
 #!/usr/bin/python3
-__author__ = 'nhumrich'
-
 import schedule
 import time
 import os
@@ -13,7 +11,6 @@ from docker import Client
 
 
 class SelectorException(Exception):
-    raise
     pass
 
 
